@@ -1,0 +1,6 @@
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\bin\Debug\EDNL.exe.config
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\obj\Debug\EDNL.csprojResolveAssemblyReference.cache
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\bin\Debug\EDNL.exe
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\bin\Debug\EDNL.pdb
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\obj\Debug\EDNL.exe
+c:\users\nicac\documents\visual studio 2015\Projects\EDNL\EDNL\obj\Debug\EDNL.pdb
