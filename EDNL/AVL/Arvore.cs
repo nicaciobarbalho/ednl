@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDNL.AVL
 {
-    public class Arvore
+    public class Arvore : Rotacao
     {
         public enum Operacao
         {
@@ -18,20 +18,13 @@ namespace EDNL.AVL
 
         public bool AtualizarAutomaticamente { get; set; }
 
-        public No Raiz { get; set; }
-
         public Arvore()
         {
             this.tamanho = 0;
             this.AtualizarAutomaticamente = true;
         }
 
-        public bool EstaVazia()
-        {
-            return this.Raiz == null;
-        }
-
-        public No Obter(int chave)
+        protected override No Obter(int chave)
         {
             if (this.Raiz == null)
             {
@@ -40,7 +33,7 @@ namespace EDNL.AVL
             return Obter(chave, this.Raiz);
         }
 
-        private No Obter(int chave, No no)
+        protected override No Obter(int chave, No no)
         {
             if (no.EExterno())
             {
@@ -61,7 +54,12 @@ namespace EDNL.AVL
             return null;
         }
 
-        private void AtualizarFatorBalanceamento(No no, Operacao operacao)
+        bool EstaVazia()
+        {
+            return this.Raiz == null;
+        }
+
+        void AtualizarFatorBalanceamento(No no, Operacao operacao)
         {
             No pai = no.Pai;
 
@@ -114,119 +112,7 @@ namespace EDNL.AVL
             }
         }
 
-        public void RotacaoEsquerdaSimples(int chave)
-        {
-            No no = this.Obter(chave);
-            if (no != null) RotacaoEsquerdaSimples(no);
-        }
-
-        private No RotacaoEsquerdaSimples(No no)
-        {
-            No direito = no.Direito;
-            No pai = no.Pai;
-            No novoDireito = direito.Esquerdo;
-
-            if (pai != null)
-            {
-                if (no.Chave > pai.Chave)
-                    pai.Direito = direito;
-                else
-                    pai.Esquerdo = direito;
-            }
-            else
-            {
-                this.Raiz = direito;
-            }
-            direito.Pai = pai;
-            direito.Esquerdo = no;
-
-            no.Pai = direito;
-            no.Direito = novoDireito;
-
-            if (novoDireito != null)
-            {
-                novoDireito.Pai = no;
-            }
-
-            no.FatorBalanceamento = (no.FatorBalanceamento + 1 - Math.Min(direito.FatorBalanceamento, 0));
-            direito.FatorBalanceamento = (direito.FatorBalanceamento + 1 + Math.Max(no.FatorBalanceamento, 0));
-
-            return no;
-        }
-
-        public void RotacaoDireitaSimples(int chave)
-        {
-            No no = this.Obter(chave);
-            if (no != null) RotacaoDireitaSimples(no);
-        }
-
-        private No RotacaoDireitaSimples(No no)
-        {
-            No esquerdo = no.Esquerdo;
-            No pai = no.Pai;
-            No novoEsquerdo = esquerdo.Direito;
-
-            if (pai != null)
-            {
-                if (no.Chave > pai.Chave)
-                    pai.Direito = esquerdo;
-                else
-                    pai.Esquerdo = esquerdo;
-            }
-            else
-            {
-                this.Raiz = esquerdo;
-            }
-            esquerdo.Pai = pai;
-            esquerdo.Direito = no;
-
-            no.Pai = esquerdo;
-            no.Esquerdo = novoEsquerdo;
-
-            if (novoEsquerdo != null)
-            {
-                novoEsquerdo.Pai = no;
-            }
-
-            no.FatorBalanceamento = (no.FatorBalanceamento - 1 - Math.Max(esquerdo.FatorBalanceamento, 0));
-            esquerdo.FatorBalanceamento = (esquerdo.FatorBalanceamento - 1 + Math.Min(no.FatorBalanceamento, 0));
-
-            return no;
-        }
-
-        public void RotacaoEsquerdaDupla(int chave)
-        {
-            No no = this.Obter(chave);
-            if (no != null) RotacaoEsquerdaDupla(no);
-        }
-
-        private No RotacaoEsquerdaDupla(No no)
-        {
-            No d = no.Direito;
-
-            this.RotacaoDireitaSimples(d);
-            this.RotacaoEsquerdaSimples(no);
-
-            return no;
-        }
-
-        public void RotacaoDireitaDupla(int chave)
-        {
-            No no = this.Obter(chave);
-            if (no != null) RotacaoDireitaDupla(no);
-        }
-
-        private No RotacaoDireitaDupla(No no)
-        {
-            No e = no.Esquerdo;
-
-            this.RotacaoEsquerdaSimples(e);
-            this.RotacaoDireitaSimples(no);
-
-            return no;
-        }
-
-        private void Balancear(No no)
+        void Balancear(No no)
         {
             if (!this.AtualizarAutomaticamente) return;
 
@@ -237,21 +123,21 @@ namespace EDNL.AVL
                 case 2:
                     if (no.Esquerdo != null && no.Esquerdo.FatorBalanceamento < 0)
                     {
-                        this.RotacaoDireitaDupla(no);
+                        this.DireitaDupla(no);
                     }
                     else
                     {
-                        this.RotacaoDireitaSimples(no);
+                        this.DireitaSimples(no);
                     }
                     break;
                 case -2:
                     if (no.Direito != null && no.Direito.FatorBalanceamento > 0)
                     {
-                        this.RotacaoEsquerdaDupla(no);
+                        this.EsquerdaDupla(no);
                     }
                     else
                     {
-                        this.RotacaoEsquerdaSimples(no);
+                        this.EsquerdaSimples(no);
                     }
                     break;
 
@@ -421,7 +307,7 @@ namespace EDNL.AVL
             return filhos;
         }
 
-        private void Filhos(List<No> filhos, No no)
+        void Filhos(List<No> filhos, No no)
         {
             if (no != null)
             {
@@ -439,12 +325,12 @@ namespace EDNL.AVL
             }
         }
 
-        public void Ordem()
+        void Ordem()
         {
             this.Ordem(this.Raiz);
         }
 
-        private void Ordem(No no)
+        void Ordem(No no)
         {
             if (no != null)
             {
@@ -462,12 +348,12 @@ namespace EDNL.AVL
             }
         }
 
-        private void PosOrdem()
+        void PosOrdem()
         {
             PosOrdem(this.Raiz);
         }
 
-        private void PosOrdem(No no)
+        void PosOrdem(No no)
         {
             if (no != null)
             {
