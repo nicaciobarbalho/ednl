@@ -386,6 +386,7 @@ namespace EDNL.RN
                 no.Irmao.Cor = "Rubro";
                 Situacao3(no.Pai);
             }
+
         }
 
         public void RotacaoSimplesEsquerda(No no)
