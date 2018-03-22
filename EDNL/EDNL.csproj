@@ -48,6 +48,9 @@
     <Compile Include="AVL\Rotacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RN\Arvore.cs" />
+    <Compile Include="RN\IRubroNegra.cs" />
+    <Compile Include="RN\No.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
