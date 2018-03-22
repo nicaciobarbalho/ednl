@@ -27,6 +27,14 @@ namespace EDNL.RN
             this.Duplo = false;
         }
 
+        public No(int elemento)
+        {
+            this.Pai = null;
+            this.Elemento = elemento;
+            this.Cor = "Rubro";
+            this.Duplo = false;
+        }
+
         public No Irmao
         {
             get
