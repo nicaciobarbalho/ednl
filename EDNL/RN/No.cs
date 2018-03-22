@@ -8,30 +8,36 @@ namespace EDNL.RN
 {
     public class No
     {
-        public int Elemento {get;set;}
+        public enum CorRubroNegra
+        {
+            Rubro = 0,
+            Negra = 1
+        }
+
+        public int Valor {get;set;}
         public No Pai { get; set; }
-        public No FilhoE { get; set; }
-        public No FilhoD { get; set; }
-        public string Cor { get; set; }
+        public No FilhoEsquerdo { get; set; }
+        public No FilhoDireito { get; set; }
+        public CorRubroNegra Cor { get; set; }
         public bool Duplo { get; set; }
 
         public No()
         {
         }
 
-        public No(No pai, int elemento)
+        public No(No pai, int valor)
         {
             this.Pai = pai;
-            this.Elemento = elemento;
-            this.Cor = "Rubro";
+            this.Valor = valor;
+            this.Cor = CorRubroNegra.Rubro;
             this.Duplo = false;
         }
 
-        public No(int elemento)
+        public No(int valor)
         {
             this.Pai = null;
-            this.Elemento = elemento;
-            this.Cor = "Rubro";
+            this.Valor = valor;
+            this.Cor = CorRubroNegra.Rubro;
             this.Duplo = false;
         }
 
@@ -40,45 +46,45 @@ namespace EDNL.RN
             get
             {
                 if (this.ehFilhoD())
-                    return Pai.FilhoE;
+                    return Pai.FilhoEsquerdo;
                 else
-                    return Pai.FilhoD;
+                    return Pai.FilhoDireito;
             }
         }
 
-        public bool isRoot()
+        public bool ERaiz()
         {
             return this.Pai == null;
         }
 
-        public bool hasFilhoE()
+        public bool TemFilhoEsquerdo()
         {
-            return this.FilhoE != null;
+            return this.FilhoEsquerdo != null;
         }
 
-        public bool hasFilhoD()
+        public bool TemFilhoDireito()
         {
-            return this.FilhoD != null;
+            return this.FilhoDireito != null;
         }
 
         public bool isInternal()
         {
-            return this.FilhoE != null || this.FilhoD != null;
+            return this.FilhoEsquerdo != null || this.FilhoDireito != null;
         }
 
         public bool isExternal()
         {
-            return this.FilhoD == null && this.FilhoE == null;
+            return this.FilhoDireito == null && this.FilhoEsquerdo == null;
         }
 
         public bool ehFilhoE()
         {
-            return this.Elemento <= this.Pai.Elemento;
+            return this.Valor <= this.Pai.Valor;
         }
 
         public bool ehFilhoD()
         {
-            return this.Elemento >= this.Pai.Elemento;
+            return this.Valor >= this.Pai.Valor;
         }
     }
 }

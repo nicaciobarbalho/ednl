@@ -18,17 +18,17 @@ namespace EDNL.RN
             raiz.Cor = "Negro";
         }
 
-        public No getRaiz()
+        public No Raiz()
         {
             return raiz;
         }
 
-        public No find(int key)
+        public No Pesquisar(int chave)
         {
-            return pesquisar(raiz, key);
+            return Pesquisar(raiz, chave);
         }
 
-        public No pesquisar(No no, int key)
+        public No Pesquisar(No no, int chave)
         {
             //Verifica se o no não tem filho
             if (no.isExternal())
@@ -36,19 +36,19 @@ namespace EDNL.RN
                 return no;
             }
             //Verifica se achou o no
-            if (no.Elemento == key)
+            if (no.Valor == chave)
             {
                 return no;
             }
             //Verifica se o no que procura esta do lado esquerdo
-            else if ((int)key < (int)no.Elemento)
+            else if ((int)chave < (int)no.Valor)
             {
-                return pesquisar(no.FilhoE, key);
+                return Pesquisar(no.FilhoEsquerdo, chave);
             }
             //Verifica se o no que procura esta do lado direito
             else//((int)key > (int)no.Elemento)
             {
-                return pesquisar(no.FilhoD, key);
+                return Pesquisar(no.FilhoDireito, chave);
             }
         }
 
@@ -60,20 +60,20 @@ namespace EDNL.RN
                 return no;
             }
             //Verifica se o no que procura esta do lado esquerdo
-            if ((int)key < (int)no.Elemento)
+            if ((int)key < (int)no.Valor)
             {
-                if (no.FilhoE == null)
+                if (no.FilhoEsquerdo == null)
                     return no;
                 else
-                    return buscarPai(no.FilhoE, key);
+                    return buscarPai(no.FilhoEsquerdo, key);
             }
             //Verifica se o no que procura esta do lado direito
             else
             {
-                if (no.FilhoD == null)
+                if (no.FilhoDireito == null)
                     return no;
                 else
-                    return buscarPai(no.FilhoD, key);
+                    return buscarPai(no.FilhoDireito, key);
             }
         }
 
@@ -85,11 +85,11 @@ namespace EDNL.RN
             No novo = new No(pai, key);
 
             //Verifica se o novo no eh filho esquerdo do pai buscado
-            if ((int)pai.Elemento > (int)novo.Elemento)
-                pai.FilhoE = novo;
+            if ((int)pai.Valor > (int)novo.Valor)
+                pai.FilhoEsquerdo = novo;
             //Verifica se o novo no eh filho direito do pai buscado
             else
-                pai.FilhoD = novo;
+                pai.FilhoDireito = novo;
             qtd++;
 
             AtualizarCores(novo);
@@ -105,24 +105,24 @@ namespace EDNL.RN
                 No tio = null;
                 //se pai é filho direito então tio é filho esquerdo de vô
                 if (pai.ehFilhoD())
-                    tio = pai.Pai.FilhoE;
+                    tio = pai.Pai.FilhoEsquerdo;
                 else
-                    tio = pai.Pai.FilhoD;
+                    tio = pai.Pai.FilhoDireito;
 
                 //tio eh negro
                 if (tio == null || tio.Cor.Equals("Negro"))
                 {
-                    Console.WriteLine("Incluir: Situação 3 no nó: " + no.Elemento);
+                    Console.WriteLine("Incluir: Situação 3 no nó: " + no.Valor);
 
                     no = Rotacionar(no);
                 }
                 //se o tio eh rubro
                 else
                 {
-                    Console.WriteLine("Incluir: Situação 2 no nó:" + no.Elemento);
+                    Console.WriteLine("Incluir: Situação 2 no nó:" + no.Valor);
                     tio.Cor = "Negro";
                     pai.Cor = "Negro";
-                    if (!pai.Pai.isRoot())
+                    if (!pai.Pai.ERaiz())
                     {
                         pai.Pai.Cor = "Rubro";
                         no = AtualizarCores(no.Pai.Pai);
@@ -183,11 +183,11 @@ namespace EDNL.RN
         public No Sucessor(No no)
         {
             //Verifica se eh folha ou se nao tem filho esquerdo --> encontrou o menor filho do no a remover
-            if (no.isExternal() || no.FilhoE == null)
+            if (no.isExternal() || no.FilhoEsquerdo == null)
                 return no;
             //Continua a procura a apartir do filho esquerdo
             else
-                return Sucessor(no.FilhoE);
+                return Sucessor(no.FilhoEsquerdo);
         }
 
         public Object remover(int key)
@@ -200,10 +200,10 @@ namespace EDNL.RN
         public Object remover(No root, int key)
         {
             //Busca a chave na arvore
-            No r = pesquisar(root, key);
+            No r = Pesquisar(root, key);
             //Visite(r);
             //Verifica se o no esta na arvore
-            if (r != null && ((int)r.Elemento == (int)key))
+            if (r != null && ((int)r.Valor == (int)key))
             {
                 //verifica se o no eh folha
                 //Console.WriteLine("oii");
@@ -222,21 +222,21 @@ namespace EDNL.RN
                     if (r.ehFilhoD())
                     {
                         //Console.WriteLine("aqui");
-                        r.Pai.FilhoD = null;
+                        r.Pai.FilhoDireito = null;
                         r.Pai = null;
                     }
                     //o no eh filho esquerdo
                     else
                     {
                         //Console.WriteLine("nao eh aqui");
-                        r.Pai.FilhoE = null;
+                        r.Pai.FilhoEsquerdo = null;
                         r.Pai = null;
                     }
                 }
                 //Verifica se o no a remover tem 1 filho e eh filho direito
-                else if (r.FilhoD != null && r.FilhoE == null)
+                else if (r.FilhoDireito != null && r.FilhoEsquerdo == null)
                 {
-                    No sucessor = r.FilhoD;
+                    No sucessor = r.FilhoDireito;
 
                     //Sucessor eh rubro
                     //Acontece nada de mais
@@ -255,15 +255,15 @@ namespace EDNL.RN
                         }
                     }
 
-                    r.Elemento = sucessor.Elemento;
+                    r.Valor = sucessor.Valor;
                     //sucessor.Elemento = key);
 
-                    remover(r.FilhoD, sucessor.Elemento);
+                    remover(r.FilhoDireito, sucessor.Valor);
                 }
                 //Verifica se o no tem 1 filho e eh filho esquerdo
-                else if (r.FilhoE != null && r.FilhoD == null)
+                else if (r.FilhoEsquerdo != null && r.FilhoDireito == null)
                 {
-                    No sucessor = r.FilhoE;
+                    No sucessor = r.FilhoEsquerdo;
 
                     //Sucessor eh rubro
                     //Acontece nada de mais
@@ -281,14 +281,14 @@ namespace EDNL.RN
                             Situacao3(sucessor);
                         }
                     }
-                    r.Elemento = sucessor.Elemento;
-                    remover(r.FilhoE, sucessor.Elemento);
+                    r.Valor = sucessor.Valor;
+                    remover(r.FilhoEsquerdo, sucessor.Valor);
                 }
                 //O no a remover tem 2 filhos
                 else
                 {
                     //Acha o sucessor
-                    No herdeiro = Sucessor(r.FilhoD);
+                    No herdeiro = Sucessor(r.FilhoDireito);
 
                     //Sucessor eh rubro
                     //Acontece nada de mais
@@ -311,9 +311,9 @@ namespace EDNL.RN
                         }
                     }
 
-                    r.Elemento = herdeiro.Elemento;
+                    r.Valor = herdeiro.Valor;
 
-                    remover(r.FilhoD, herdeiro.Elemento);
+                    remover(r.FilhoDireito, herdeiro.Valor);
 
                 }
                 return r;
@@ -330,7 +330,7 @@ namespace EDNL.RN
                 if (no.Irmao.ehFilhoD())
                 {
                     no.Irmao.Cor = "Negro";
-                    if (!no.Pai.isRoot())
+                    if (!no.Pai.ERaiz())
                         no.Pai.Cor = "Rubro";
 
                     RotacaoSimplesEsquerda(no.Pai);
@@ -345,39 +345,39 @@ namespace EDNL.RN
                 no.Irmao.Cor = "Rubro";
             }
             //caso 3 para no esquerdo
-            else if (no.ehFilhoE() && no.Irmao.FilhoE.Cor.Equals("Rubro") && no.Irmao.FilhoD.Cor.Equals("Negro"))
+            else if (no.ehFilhoE() && no.Irmao.FilhoEsquerdo.Cor.Equals("Rubro") && no.Irmao.FilhoDireito.Cor.Equals("Negro"))
             {
                 Console.WriteLine("Caso 3");
-                no.Irmao.FilhoE.Cor = "Negro";
+                no.Irmao.FilhoEsquerdo.Cor = "Negro";
                 no.Irmao.Cor = "Rubro";
                 RotacaoSimplesDireita(no.Irmao);
                 Situacao3(no);
             }
             //caso 3 para no direito (espelhado)
-            else if (no.ehFilhoE() && no.Irmao.FilhoD.Cor.Equals("Rubro") && no.Irmao.FilhoE.Cor.Equals("Negro"))
+            else if (no.ehFilhoE() && no.Irmao.FilhoDireito.Cor.Equals("Rubro") && no.Irmao.FilhoEsquerdo.Cor.Equals("Negro"))
             {
                 Console.WriteLine("Caso 3'");
-                no.Irmao.FilhoD.Cor = "Negro";
+                no.Irmao.FilhoDireito.Cor = "Negro";
                 no.Irmao.Cor = "Rubro";
                 RotacaoSimplesEsquerda(no.Irmao);
                 Situacao3(no);
             }
             //caso 4 para no esquerdo
-            else if (no.ehFilhoE() && no.Irmao.FilhoD.Cor.Equals("Rubro"))
+            else if (no.ehFilhoE() && no.Irmao.FilhoDireito.Cor.Equals("Rubro"))
             {
                 Console.WriteLine("Caso 4");
                 no.Irmao.Cor = no.Pai.Cor;
                 no.Pai.Cor = "Negro";
-                no.Irmao.FilhoD.Cor = "Negro";
+                no.Irmao.FilhoDireito.Cor = "Negro";
                 RotacaoSimplesEsquerda(no.Pai);
             }
             //caso 4 para no direito (espelhado)
-            else if (no.ehFilhoD() && no.Irmao.FilhoE.Cor.Equals("Rubro"))
+            else if (no.ehFilhoD() && no.Irmao.FilhoEsquerdo.Cor.Equals("Rubro"))
             {
                 Console.WriteLine("Caso 4_");
                 no.Irmao.Cor = no.Pai.Cor;
                 no.Pai.Cor = "Negro";
-                no.Irmao.FilhoE.Cor = "Negro";
+                no.Irmao.FilhoEsquerdo.Cor = "Negro";
                 RotacaoSimplesDireita(no.Pai);
             }
             //caso 2A
@@ -391,38 +391,38 @@ namespace EDNL.RN
 
         public void RotacaoSimplesEsquerda(No no)
         {
-            Console.WriteLine("Rotacao Simples Esquerda " + no.Elemento);
+            Console.WriteLine("Rotacao Simples Esquerda " + no.Valor);
 
             No netoE = null;
 
             //se necessario, atualiza a raiz
-            if (no.isRoot())
-                raiz = no.FilhoD;
+            if (no.ERaiz())
+                raiz = no.FilhoDireito;
 
             //guarda o netoE e atualiza suas referencia para o pai
-            if (no.FilhoD.FilhoE != null)
+            if (no.FilhoDireito.FilhoEsquerdo != null)
             {
-                netoE = no.FilhoD.FilhoE;
+                netoE = no.FilhoDireito.FilhoEsquerdo;
                 netoE.Pai = no;
             }
 
             //Atualiza as referencias do filho direito do no
-            no.FilhoD.Pai = no;
-            no.FilhoD.FilhoE = no;
+            no.FilhoDireito.Pai = no;
+            no.FilhoDireito.FilhoEsquerdo = no;
 
             //Atualiza as referencias do pai do no se existir
             if (no.Pai != null)
             {
-                if (no.Elemento > no.Pai.Elemento)
-                    no.Pai.FilhoD = no.FilhoD;
+                if (no.Valor > no.Pai.Valor)
+                    no.Pai.FilhoDireito = no.FilhoDireito;
                 else
-                    no.Pai.FilhoE = no.FilhoD;
+                    no.Pai.FilhoEsquerdo = no.FilhoDireito;
             }
 
             //Atualiza as referencias do no
             no.Pai = no;
             //if(netoE != null)
-            no.FilhoD = netoE;
+            no.FilhoDireito = netoE;
             //else
             //   no.FilhoD = null;
 
@@ -431,38 +431,38 @@ namespace EDNL.RN
 
         public void RotacaoSimplesDireita(No no)
         {
-            Console.WriteLine("Rotacao Simples Direita " + no.Elemento);
+            Console.WriteLine("Rotacao Simples Direita " + no.Valor);
 
             No netoD = null;
 
             //se necessario, atuliza a raiz
-            if (no.isRoot())
-                raiz = no.FilhoE;
+            if (no.ERaiz())
+                raiz = no.FilhoEsquerdo;
 
             //guarda o netoD 
-            if (no.FilhoE.FilhoD != null)
+            if (no.FilhoEsquerdo.FilhoDireito != null)
             {
-                netoD = no.FilhoE.FilhoD;
+                netoD = no.FilhoEsquerdo.FilhoDireito;
                 netoD.Pai = no;
             }
 
             //Atualiza as referencias do filho esquerdo do no
-            no.FilhoE.Pai = no;
-            no.FilhoE.FilhoD = no;
+            no.FilhoEsquerdo.Pai = no;
+            no.FilhoEsquerdo.FilhoDireito = no;
 
             //Atualiza as referencias do pai do no, se existir
             if (no.Pai != null)
             {
-                if (no.Elemento > no.Pai.Elemento)
-                    no.Pai.FilhoD = no.FilhoE;
+                if (no.Valor > no.Pai.Valor)
+                    no.Pai.FilhoDireito = no.FilhoEsquerdo;
                 else
-                    no.Pai.FilhoE = no.FilhoE;
+                    no.Pai.FilhoEsquerdo = no.FilhoEsquerdo;
             }
 
             //Atualiza as referencias do no
             no.Pai = no;
             //if(netoD != null)
-            no.FilhoE = netoD;
+            no.FilhoEsquerdo = netoD;
             //else
             //    no.setFilhoE(null);
 
@@ -471,28 +471,28 @@ namespace EDNL.RN
 
         public void RotacaoDuplaEsquerda(No no)
         {
-            RotacaoSimplesDireita(no.FilhoD);
+            RotacaoSimplesDireita(no.FilhoDireito);
             RotacaoSimplesEsquerda(no);
         }
 
         public void RotacaoDuplaDireita(No no)
         {
-            RotacaoSimplesEsquerda(no.FilhoE);
+            RotacaoSimplesEsquerda(no.FilhoEsquerdo);
             RotacaoSimplesDireita(no);
         }
 
         //Metodo que mostra as caracteristicas do no *OBS: Faz a verificações para não dar erro de referencia nula
         public void Visite(No n)
         {
-            Console.WriteLine("Elemento:" + n.Elemento + " Cor: " + n.Cor);
-            if (!n.isRoot())
-                Console.WriteLine(" Pai:" + n.Pai.Elemento);
+            Console.WriteLine("Elemento:" + n.Valor + " Cor: " + n.Cor);
+            if (!n.ERaiz())
+                Console.WriteLine(" Pai:" + n.Pai.Valor);
 
-            if (n.FilhoE != null)
-                Console.WriteLine(" FilhoE:" + n.FilhoE.Elemento);
+            if (n.FilhoEsquerdo != null)
+                Console.WriteLine(" FilhoE:" + n.FilhoEsquerdo.Valor);
 
-            if (n.FilhoD != null)
-                Console.WriteLine(" FilhoD:" + n.FilhoD.Elemento);
+            if (n.FilhoDireito != null)
+                Console.WriteLine(" FilhoD:" + n.FilhoDireito.Valor);
 
             Console.WriteLine();
         }
@@ -500,18 +500,17 @@ namespace EDNL.RN
         //Metodo para visualizar a arvore --> Algoritmo InOrder
         public void exibirArvore(No n)
         {
-            if (n.isInternal() && n.FilhoE != null)
+            if (n.isInternal() && n.FilhoEsquerdo != null)
             {
-                exibirArvore(n.FilhoE);
+                exibirArvore(n.FilhoEsquerdo);
             }
 
             Visite(n);
 
-            if (n.isInternal() && n.FilhoD != null)
+            if (n.isInternal() && n.FilhoDireito != null)
             {
-                exibirArvore(n.FilhoD);
+                exibirArvore(n.FilhoDireito);
             }
         }
-        
     }
 }

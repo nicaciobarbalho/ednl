@@ -26,7 +26,7 @@ namespace EDNL.RN
             var next = root;
             for (int level = 0; next != null; level++)
             {
-                var item = new NodeInfo { Node = next, Text = next.Elemento.ToString(" 0 ") };
+                var item = new NodeInfo { Node = next, Text = next.Valor.ToString(" 0 ") };
                 if (level < last.Count)
                 {
                     item.StartPos = last[level].EndPos + 1;
@@ -40,7 +40,7 @@ namespace EDNL.RN
                 if (level > 0)
                 {
                     item.Parent = last[level - 1];
-                    if (next == item.Parent.Node.FilhoE)
+                    if (next == item.Parent.Node.FilhoEsquerdo)
                     {
                         item.Parent.Left = item;
                         item.EndPos = Math.Max(item.EndPos, item.Parent.StartPos);
@@ -51,7 +51,7 @@ namespace EDNL.RN
                         item.StartPos = Math.Max(item.StartPos, item.Parent.EndPos);
                     }
                 }
-                next = next.FilhoE ?? next.FilhoD;
+                next = next.FilhoEsquerdo ?? next.FilhoDireito;
                 for (; next == null; item = item.Parent)
                 {
                     Print(item, rootTop + 2 * level);
@@ -59,7 +59,7 @@ namespace EDNL.RN
                     if (item == item.Parent.Left)
                     {
                         item.Parent.StartPos = item.EndPos;
-                        next = item.Parent.Node.FilhoD;
+                        next = item.Parent.Node.FilhoDireito;
                     }
                     else
                     {
@@ -75,9 +75,9 @@ namespace EDNL.RN
 
         private static void Print(NodeInfo item, int top)
         {
-            SwapColors();
+            SwapColors(item.Node);
             Print(item.Text, top, item.StartPos);
-            SwapColors();
+            SwapColors(item.Node);
             if (item.Left != null)
                 PrintLink(top + 1, "┌", "┘", item.Left.StartPos + item.Left.Size / 2, item.StartPos);
             if (item.Right != null)
@@ -98,11 +98,10 @@ namespace EDNL.RN
             while (Console.CursorLeft < right) Console.Write(s);
         }
 
-        private static void SwapColors()
+        private static void SwapColors(No no)
         {
-            var color = Console.ForegroundColor;
-            Console.ForegroundColor = Console.BackgroundColor;
-            Console.BackgroundColor = color;
+            Console.ForegroundColor = no.Cor.Equals("Rubro") ? ConsoleColor.Red : ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
         }
     }
 }

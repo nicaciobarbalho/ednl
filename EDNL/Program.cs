@@ -26,12 +26,14 @@ namespace EDNL
              Console.WriteLine(s1);*/
 
             EDNL.RN.Arvore tree = new RN.Arvore();
-            EDNL.RN.No raiz = new EDNL.RN.No(7);
+            EDNL.RN.No raiz = new EDNL.RN.No(10);
             tree.setRaiz(raiz);
-            tree.incluir(5);
-            tree.incluir(9);
+            tree.incluir(6);
+            tree.incluir(22);
+            tree.incluir(3);
             tree.incluir(8);
-            tree.incluir(10);
+            tree.incluir(7);
+            tree.incluir(9);
             /*tree.incluir(70);
             tree.incluir(120);
             tree.incluir(60);
@@ -39,14 +41,14 @@ namespace EDNL
             tree.incluir(110);
             tree.incluir(130);
             */
-           // Console.WriteLine("removendo");
+            // Console.WriteLine("removendo");
             //tree.remover(9);
 
-           // tree.exibirArvore(tree.getRaiz());
+            // tree.exibirArvore(tree.getRaiz());
 
-           // tree.Print(tree.getRaiz(), 0);
-
-            BTreePrinter.Print(tree.getRaiz());
+            // tree.Print(tree.getRaiz(), 0);
+         
+            tree.Raiz().Print();
             Console.ReadKey();
         }
     }
