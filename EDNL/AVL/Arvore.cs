@@ -85,7 +85,7 @@ namespace EDNL.AVL
                     }
                     else
                     {
-                        AtualizarFatorBalanceamento(pai, operacao);
+                        this.AtualizarFatorBalanceamento(pai, operacao);
                     }
                 }
             }
@@ -103,11 +103,11 @@ namespace EDNL.AVL
                 if ((pai.FatorBalanceamento == -2) || pai.FatorBalanceamento == 2)
                 {
                     Balancear(pai);
-                    AtualizarFatorBalanceamento(pai.Pai, operacao);
+                    this.AtualizarFatorBalanceamento(pai.Pai, operacao);
                 }
                 else if (pai.FatorBalanceamento == 0)
                 {
-                    AtualizarFatorBalanceamento(pai, operacao);
+                    this.AtualizarFatorBalanceamento(pai, operacao);
                 }
             }
         }

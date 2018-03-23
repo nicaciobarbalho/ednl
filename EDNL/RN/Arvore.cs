@@ -7,31 +7,28 @@ using System.Threading.Tasks;
 
 namespace EDNL.RN
 {
-    public class Arvore
+    public class Arvore : Rotacao
     {
-        private No raiz;
+        public Arvore(int chave)
+        {
+            this.Raiz = new RN.No(chave);
+        }
+        public Arvore()
+        {
+            this.Raiz = null;
+        }
+
         private int qtd;
-
-        public void setRaiz(No no)
-        {
-            raiz = no;
-            raiz.Cor = "Negro";
-        }
-
-        public No Raiz()
-        {
-            return raiz;
-        }
 
         public No Pesquisar(int chave)
         {
-            return Pesquisar(raiz, chave);
+            return Pesquisar(this.Raiz, chave);
         }
 
         public No Pesquisar(No no, int chave)
         {
             //Verifica se o no não tem filho
-            if (no.isExternal())
+            if (no.EExterno())
             {
                 return no;
             }
@@ -46,26 +43,26 @@ namespace EDNL.RN
                 return Pesquisar(no.FilhoEsquerdo, chave);
             }
             //Verifica se o no que procura esta do lado direito
-            else//((int)key > (int)no.Elemento)
+            else
             {
                 return Pesquisar(no.FilhoDireito, chave);
             }
         }
 
-        private No buscarPai(No no, int key)
+        private No PesquisarPai(No no, int chave)
         {
             //Verifica se o no não tem filho
-            if (no.isExternal())
+            if (no.EExterno())
             {
                 return no;
             }
             //Verifica se o no que procura esta do lado esquerdo
-            if ((int)key < (int)no.Valor)
+            if ((int)chave < (int)no.Valor)
             {
                 if (no.FilhoEsquerdo == null)
                     return no;
                 else
-                    return buscarPai(no.FilhoEsquerdo, key);
+                    return PesquisarPai(no.FilhoEsquerdo, chave);
             }
             //Verifica se o no que procura esta do lado direito
             else
@@ -73,59 +70,38 @@ namespace EDNL.RN
                 if (no.FilhoDireito == null)
                     return no;
                 else
-                    return buscarPai(no.FilhoDireito, key);
+                    return PesquisarPai(no.FilhoDireito, chave);
             }
-        }
-
-        public No incluir(int key)
-        {
-            //Busca o pai do no que vai ser inserido
-            No pai = buscarPai(raiz, key);
-            //Cria o novo no
-            No novo = new No(pai, key);
-
-            //Verifica se o novo no eh filho esquerdo do pai buscado
-            if ((int)pai.Valor > (int)novo.Valor)
-                pai.FilhoEsquerdo = novo;
-            //Verifica se o novo no eh filho direito do pai buscado
-            else
-                pai.FilhoDireito = novo;
-            qtd++;
-
-            AtualizarCores(novo);
-
-            return novo;
         }
 
         private No AtualizarCores(No no)
         {
             No pai = no.Pai;
-            if (pai.Cor.Equals("Rubro"))
+            if (pai.Cor.Equals(No.CorRubroNegra.Rubro))
             {
                 No tio = null;
                 //se pai é filho direito então tio é filho esquerdo de vô
-                if (pai.ehFilhoD())
+                if (pai.EFilhoDireito())
                     tio = pai.Pai.FilhoEsquerdo;
                 else
                     tio = pai.Pai.FilhoDireito;
 
-                //tio eh negro
-                if (tio == null || tio.Cor.Equals("Negro"))
+                //tio é negro
+                if (tio == null || tio.Cor.Equals(No.CorRubroNegra.Negro))
                 {
-                    Console.WriteLine("Incluir: Situação 3 no nó: " + no.Valor);
-
-                    no = Rotacionar(no);
+                    base.OnMensagem(no, "Situação 3");
+                    no = base.Rotacionar(no);
                 }
-                //se o tio eh rubro
+                //se o tio é rubro
                 else
                 {
-                    Console.WriteLine("Incluir: Situação 2 no nó:" + no.Valor);
-                    tio.Cor = "Negro";
-                    pai.Cor = "Negro";
+                    base.OnMensagem(no, "Situação 2");
+                    tio.Cor = No.CorRubroNegra.Negro;
+                    pai.Cor = No.CorRubroNegra.Negro;
                     if (!pai.Pai.ERaiz())
                     {
-                        pai.Pai.Cor = "Rubro";
-                        no = AtualizarCores(no.Pai.Pai);
+                        pai.Pai.Cor = No.CorRubroNegra.Rubro;
+                        no = this.AtualizarCores(no.Pai.Pai);
                     }
                 }
             }
@@ -133,187 +109,156 @@ namespace EDNL.RN
             return no;
         }
 
-        private No Rotacionar(No no)
-        {
-            No retorno = null;
-            No avo = no.Pai.Pai;
-            No pai = no.Pai;
-
-            //Rotacao simples a direita
-            if (no.ehFilhoE() && pai.ehFilhoE())
-            {
-                retorno = no.Pai;
-                avo.Cor = "Rubro";
-                pai.Cor = "Negro";
-
-                RotacaoSimplesDireita(avo);
-            }
-            //Rotacao simples a esquerda
-            else if (no.ehFilhoD() && pai.ehFilhoD())
-            {
-                retorno = no.Pai;
-                avo.Cor = "Rubro";
-                pai.Cor = "Negro";
-
-                RotacaoSimplesEsquerda(avo);
-
-            }
-            //Rotacao dupla esquerda
-            else if (pai.ehFilhoD())
-            {
-                retorno = no;
-                avo.Cor = "Rubro";
-                no.Cor = "Negro";
-
-                RotacaoDuplaEsquerda(avo);
-            }
-            //Rotacao dupla direita
-            else
-            {
-                retorno = no;
-                avo.Cor = "Rubro";
-                no.Cor = "Negro";
-
-                RotacaoDuplaDireita(avo);
-            }
-
-            return retorno;
-        }
-
         public No Sucessor(No no)
         {
-            //Verifica se eh folha ou se nao tem filho esquerdo --> encontrou o menor filho do no a remover
-            if (no.isExternal() || no.FilhoEsquerdo == null)
+            //Verifica se é folha ou se nao tem filho esquerdo --> encontrou o menor filho do no a remover
+            if (no.EExterno() || no.FilhoEsquerdo == null)
                 return no;
             //Continua a procura a apartir do filho esquerdo
             else
-                return Sucessor(no.FilhoEsquerdo);
+                return this.Sucessor(no.FilhoEsquerdo);
         }
 
-        public Object remover(int key)
+        public No Incluir(int chave)
         {
-            if (remover(raiz, key) != null)
+            //Busca o pai do no que vai ser inserido
+            No pai = this.PesquisarPai(this.Raiz, chave);
+            //Cria o novo no
+            No novo = new No(pai, chave);
+
+            //Verifica se o novo no é filho esquerdo do pai buscado
+            if ((int)pai.Valor > (int)novo.Valor)
+                pai.FilhoEsquerdo = novo;
+            //Verifica se o novo no é filho direito do pai buscado
+            else
+                pai.FilhoDireito = novo;
+            qtd++;
+
+            this.AtualizarCores(novo);
+
+            return novo;
+        }
+
+        public object Remover(int chave)
+        {
+            if (this.Remover(this.Raiz, chave) != null)
                 qtd--;
             return null;
         }
 
-        public Object remover(No root, int key)
+        public object Remover(No root, int chave)
         {
             //Busca a chave na arvore
-            No r = Pesquisar(root, key);
+            No r = this.Pesquisar(root, chave);
             //Visite(r);
             //Verifica se o no esta na arvore
-            if (r != null && ((int)r.Valor == (int)key))
+            if (r != null && ((int)r.Valor == (int)chave))
             {
-                //verifica se o no eh folha
-                //Console.WriteLine("oii");
-                if (r.isExternal())
+                //verifica se o no é folho
+                if (r.EExterno())
                 {
-                    //Console.WriteLine("e aqui");
-                    //No a ser removido eh negro (sucessor negro) entao segue para a situação 3
-                    if (r.Cor.Equals("Negro"))
+                    //No a ser removido é negro (sucessor negro) entao segue para a situação 3
+                    if (r.Cor.Equals(No.CorRubroNegra.Negro))
                     {
-                        Situacao3(r);
+                        this.Situacao3(r);
                     }
-                    //No a ser removido eh rubro então pode seguir normalmente
+                    //No a ser removido é rubro então pode seguir normalmente
 
                     //Removendo...
-                    //verifica se o no eh o filho direito
-                    if (r.ehFilhoD())
+                    //verifica se o no é o filho direito
+                    if (r.EFilhoDireito())
                     {
-                        //Console.WriteLine("aqui");
                         r.Pai.FilhoDireito = null;
                         r.Pai = null;
                     }
-                    //o no eh filho esquerdo
+                    //o no é filho esquerdo
                     else
                     {
-                        //Console.WriteLine("nao eh aqui");
                         r.Pai.FilhoEsquerdo = null;
                         r.Pai = null;
                     }
                 }
-                //Verifica se o no a remover tem 1 filho e eh filho direito
+                //Verifica se o no a remover tem 1 filho e é filho direito
                 else if (r.FilhoDireito != null && r.FilhoEsquerdo == null)
                 {
                     No sucessor = r.FilhoDireito;
 
-                    //Sucessor eh rubro
+                    //Sucessor é rubro
                     //Acontece nada de mais
 
-                    //Sucessor eh negro
-                    if (sucessor.Cor.Equals("Negro"))
+                    //Sucessor é negro
+                    if (sucessor.Cor.Equals(No.CorRubroNegra.Negro))
                     {
-                        if (r.Cor.Equals("Negro"))
+                        if (r.Cor.Equals(No.CorRubroNegra.Negro))
                         {
-                            Situacao3(sucessor);
+                            this.Situacao3(sucessor);
                         }
                         else
                         {
-                            sucessor.Cor = "Rubro";
-                            Situacao3(sucessor);
+                            sucessor.Cor = No.CorRubroNegra.Rubro;
+                            this.Situacao3(sucessor);
                         }
                     }
 
                     r.Valor = sucessor.Valor;
-                    //sucessor.Elemento = key);
 
-                    remover(r.FilhoDireito, sucessor.Valor);
+                    this.Remover(r.FilhoDireito, sucessor.Valor);
                 }
-                //Verifica se o no tem 1 filho e eh filho esquerdo
+                //Verifica se o no tem 1 filho e é filho esquerdo
                 else if (r.FilhoEsquerdo != null && r.FilhoDireito == null)
                 {
                     No sucessor = r.FilhoEsquerdo;
 
-                    //Sucessor eh rubro
+                    //Sucessor é rubro
                     //Acontece nada de mais
 
-                    //Sucessor eh negro
-                    if (sucessor.Cor.Equals("Negro"))
+                    //Sucessor é negro
+                    if (sucessor.Cor.Equals(No.CorRubroNegra.Negro))
                     {
-                        if (r.Cor.Equals("Negro"))
+                        if (r.Cor.Equals(No.CorRubroNegra.Negro))
                         {
-                            Situacao3(sucessor);
+                            this.Situacao3(sucessor);
                         }
                         else
                         {
-                            sucessor.Cor = "Rubro";
-                            Situacao3(sucessor);
+                            sucessor.Cor = No.CorRubroNegra.Rubro;
+                            this.Situacao3(sucessor);
                         }
                     }
                     r.Valor = sucessor.Valor;
-                    remover(r.FilhoEsquerdo, sucessor.Valor);
+                    this.Remover(r.FilhoEsquerdo, sucessor.Valor);
                 }
                 //O no a remover tem 2 filhos
                 else
                 {
                     //Acha o sucessor
-                    No herdeiro = Sucessor(r.FilhoDireito);
+                    No herdeiro = this.Sucessor(r.FilhoDireito);
 
-                    //Sucessor eh rubro
+                    //Sucessor é rubro
                     //Acontece nada de mais
-                    //Sucessor eh negro
-                    if (herdeiro.Cor.Equals("Negro"))
+                    //Sucessor é negro
+                    if (herdeiro.Cor.Equals(No.CorRubroNegra.Negro))
                     {
                         //no negro e sucessor negro
                         //situação 3
-                        if (r.Cor.Equals("Negro"))
+                        if (r.Cor.Equals(No.CorRubroNegra.Negro))
                         {
-                            Situacao3(herdeiro);
+                            this.Situacao3(herdeiro);
+                            base.OnMensagem("Situação 3");
                         }
                         //no rubro e sucessor negro
                         //situação 4
                         else
                         {
-                            Console.WriteLine("Situação 4");
-                            herdeiro.Cor = "Rubro";
-                            Situacao3(herdeiro);
+                            herdeiro.Cor = No.CorRubroNegra.Rubro;
+                            this.Situacao3(herdeiro);
+                            base.OnMensagem("Situação 4");
                         }
                     }
 
                     r.Valor = herdeiro.Valor;
 
-                    remover(r.FilhoDireito, herdeiro.Valor);
+                    this.Remover(r.FilhoDireito, herdeiro.Valor);
 
                 }
                 return r;
@@ -324,193 +269,70 @@ namespace EDNL.RN
         public void Situacao3(No no)
         {
             //caso 1
-            if (no.Irmao.Cor.Equals("Rubro"))
+            if (no.Irmao.Cor.Equals(No.CorRubroNegra.Rubro))
             {
-                Console.WriteLine("Caso 1");
-                if (no.Irmao.ehFilhoD())
+                base.OnMensagem(no, "Situação: Caso 1");
+                if (no.Irmao.EFilhoDireito())
                 {
-                    no.Irmao.Cor = "Negro";
+                    no.Irmao.Cor = No.CorRubroNegra.Negro;
                     if (!no.Pai.ERaiz())
-                        no.Pai.Cor = "Rubro";
+                        no.Pai.Cor = No.CorRubroNegra.Rubro;
 
-                    RotacaoSimplesEsquerda(no.Pai);
-                    Situacao3(no);
+                    base.RotacaoSimplesEsquerda(no.Pai);
+                    this.Situacao3(no);
                 }
             }
             //caso 2B
-            else if (no.Pai.Cor.Equals("Rubro"))
+            else if (no.Pai.Cor.Equals(No.CorRubroNegra.Rubro))
             {
-                Console.WriteLine("Caso 2B");
-                no.Pai.Cor = "Negro";
-                no.Irmao.Cor = "Rubro";
+                base.OnMensagem(no, "Situação: Caso 2B");
+                no.Pai.Cor = No.CorRubroNegra.Negro;
+                no.Irmao.Cor = No.CorRubroNegra.Rubro;
             }
             //caso 3 para no esquerdo
-            else if (no.ehFilhoE() && no.Irmao.FilhoEsquerdo.Cor.Equals("Rubro") && no.Irmao.FilhoDireito.Cor.Equals("Negro"))
+            else if (no.EFilhoEsquerdo() && no.Irmao.FilhoEsquerdo.Cor.Equals(No.CorRubroNegra.Rubro) && no.Irmao.FilhoDireito.Cor.Equals(No.CorRubroNegra.Negro))
             {
-                Console.WriteLine("Caso 3");
-                no.Irmao.FilhoEsquerdo.Cor = "Negro";
-                no.Irmao.Cor = "Rubro";
-                RotacaoSimplesDireita(no.Irmao);
-                Situacao3(no);
+                base.OnMensagem(no, "Situação: Caso 3(Esquerdo)");
+                no.Irmao.FilhoEsquerdo.Cor = No.CorRubroNegra.Negro;
+                no.Irmao.Cor = No.CorRubroNegra.Rubro;
+                base.RotacaoSimplesDireita(no.Irmao);
+                this.Situacao3(no);
             }
             //caso 3 para no direito (espelhado)
-            else if (no.ehFilhoE() && no.Irmao.FilhoDireito.Cor.Equals("Rubro") && no.Irmao.FilhoEsquerdo.Cor.Equals("Negro"))
+            else if (no.EFilhoEsquerdo() && no.Irmao.FilhoDireito.Cor.Equals(No.CorRubroNegra.Rubro) && no.Irmao.FilhoEsquerdo.Cor.Equals(No.CorRubroNegra.Negro))
             {
-                Console.WriteLine("Caso 3'");
-                no.Irmao.FilhoDireito.Cor = "Negro";
-                no.Irmao.Cor = "Rubro";
-                RotacaoSimplesEsquerda(no.Irmao);
-                Situacao3(no);
+                base.OnMensagem(no, "Situação: Caso 3(Direito)");
+                no.Irmao.FilhoDireito.Cor = No.CorRubroNegra.Negro;
+                no.Irmao.Cor = No.CorRubroNegra.Rubro;
+                base.RotacaoSimplesEsquerda(no.Irmao);
+                this.Situacao3(no);
             }
             //caso 4 para no esquerdo
-            else if (no.ehFilhoE() && no.Irmao.FilhoDireito.Cor.Equals("Rubro"))
+            else if (no.EFilhoEsquerdo() && no.Irmao.FilhoDireito.Cor.Equals(No.CorRubroNegra.Rubro))
             {
-                Console.WriteLine("Caso 4");
+                base.OnMensagem(no, "Situação: Caso 4(Esquerdo)");
                 no.Irmao.Cor = no.Pai.Cor;
-                no.Pai.Cor = "Negro";
-                no.Irmao.FilhoDireito.Cor = "Negro";
-                RotacaoSimplesEsquerda(no.Pai);
+                no.Pai.Cor = No.CorRubroNegra.Negro;
+                no.Irmao.FilhoDireito.Cor = No.CorRubroNegra.Negro;
+                base.RotacaoSimplesEsquerda(no.Pai);
             }
             //caso 4 para no direito (espelhado)
-            else if (no.ehFilhoD() && no.Irmao.FilhoEsquerdo.Cor.Equals("Rubro"))
+            else if (no.EFilhoDireito() && no.Irmao.FilhoEsquerdo.Cor.Equals(No.CorRubroNegra.Rubro))
             {
-                Console.WriteLine("Caso 4_");
+                base.OnMensagem(no, "Situação: Caso 4(Direito)");
                 no.Irmao.Cor = no.Pai.Cor;
-                no.Pai.Cor = "Negro";
-                no.Irmao.FilhoEsquerdo.Cor = "Negro";
-                RotacaoSimplesDireita(no.Pai);
+                no.Pai.Cor = No.CorRubroNegra.Negro;
+                no.Irmao.FilhoEsquerdo.Cor = No.CorRubroNegra.Negro;
+                base.RotacaoSimplesDireita(no.Pai);
             }
             //caso 2A
             else
             {
-                Console.WriteLine("Caso 2A");
-                no.Irmao.Cor = "Rubro";
-                Situacao3(no.Pai);
+                base.OnMensagem(no, "Situação: Caso 2A");
+                no.Irmao.Cor = No.CorRubroNegra.Rubro;
+                this.Situacao3(no.Pai);
             }
         }
 
-        public void RotacaoSimplesEsquerda(No no)
-        {
-            Console.WriteLine("Rotacao Simples Esquerda " + no.Valor);
-
-            No netoE = null;
-
-            //se necessario, atualiza a raiz
-            if (no.ERaiz())
-                raiz = no.FilhoDireito;
-
-            //guarda o netoE e atualiza suas referencia para o pai
-            if (no.FilhoDireito.FilhoEsquerdo != null)
-            {
-                netoE = no.FilhoDireito.FilhoEsquerdo;
-                netoE.Pai = no;
-            }
-
-            //Atualiza as referencias do filho direito do no
-            no.FilhoDireito.Pai = no;
-            no.FilhoDireito.FilhoEsquerdo = no;
-
-            //Atualiza as referencias do pai do no se existir
-            if (no.Pai != null)
-            {
-                if (no.Valor > no.Pai.Valor)
-                    no.Pai.FilhoDireito = no.FilhoDireito;
-                else
-                    no.Pai.FilhoEsquerdo = no.FilhoDireito;
-            }
-
-            //Atualiza as referencias do no
-            no.Pai = no;
-            //if(netoE != null)
-            no.FilhoDireito = netoE;
-            //else
-            //   no.FilhoD = null;
-
-            //exibirArvore(raiz);
-        }
-
-        public void RotacaoSimplesDireita(No no)
-        {
-            Console.WriteLine("Rotacao Simples Direita " + no.Valor);
-
-            No netoD = null;
-
-            //se necessario, atuliza a raiz
-            if (no.ERaiz())
-                raiz = no.FilhoEsquerdo;
-
-            //guarda o netoD 
-            if (no.FilhoEsquerdo.FilhoDireito != null)
-            {
-                netoD = no.FilhoEsquerdo.FilhoDireito;
-                netoD.Pai = no;
-            }
-
-            //Atualiza as referencias do filho esquerdo do no
-            no.FilhoEsquerdo.Pai = no;
-            no.FilhoEsquerdo.FilhoDireito = no;
-
-            //Atualiza as referencias do pai do no, se existir
-            if (no.Pai != null)
-            {
-                if (no.Valor > no.Pai.Valor)
-                    no.Pai.FilhoDireito = no.FilhoEsquerdo;
-                else
-                    no.Pai.FilhoEsquerdo = no.FilhoEsquerdo;
-            }
-
-            //Atualiza as referencias do no
-            no.Pai = no;
-            //if(netoD != null)
-            no.FilhoEsquerdo = netoD;
-            //else
-            //    no.setFilhoE(null);
-
-            //exibirArvore(raiz);
-        }
-
-        public void RotacaoDuplaEsquerda(No no)
-        {
-            RotacaoSimplesDireita(no.FilhoDireito);
-            RotacaoSimplesEsquerda(no);
-        }
-
-        public void RotacaoDuplaDireita(No no)
-        {
-            RotacaoSimplesEsquerda(no.FilhoEsquerdo);
-            RotacaoSimplesDireita(no);
-        }
-
-        //Metodo que mostra as caracteristicas do no *OBS: Faz a verificações para não dar erro de referencia nula
-        public void Visite(No n)
-        {
-            Console.WriteLine("Elemento:" + n.Valor + " Cor: " + n.Cor);
-            if (!n.ERaiz())
-                Console.WriteLine(" Pai:" + n.Pai.Valor);
-
-            if (n.FilhoEsquerdo != null)
-                Console.WriteLine(" FilhoE:" + n.FilhoEsquerdo.Valor);
-
-            if (n.FilhoDireito != null)
-                Console.WriteLine(" FilhoD:" + n.FilhoDireito.Valor);
-
-            Console.WriteLine();
-        }
-
-        //Metodo para visualizar a arvore --> Algoritmo InOrder
-        public void exibirArvore(No n)
-        {
-            if (n.isInternal() && n.FilhoEsquerdo != null)
-            {
-                exibirArvore(n.FilhoEsquerdo);
-            }
-
-            Visite(n);
-
-            if (n.isInternal() && n.FilhoDireito != null)
-            {
-                exibirArvore(n.FilhoDireito);
-            }
-        }
     }
 }

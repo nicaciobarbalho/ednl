@@ -11,7 +11,7 @@ namespace EDNL.RN
         public enum CorRubroNegra
         {
             Rubro = 0,
-            Negra = 1
+            Negro = 1
         }
 
         public int Valor {get;set;}
@@ -45,7 +45,7 @@ namespace EDNL.RN
         {
             get
             {
-                if (this.ehFilhoD())
+                if (this.EFilhoDireito())
                     return Pai.FilhoEsquerdo;
                 else
                     return Pai.FilhoDireito;
@@ -67,22 +67,22 @@ namespace EDNL.RN
             return this.FilhoDireito != null;
         }
 
-        public bool isInternal()
+        public bool EInterno()
         {
             return this.FilhoEsquerdo != null || this.FilhoDireito != null;
         }
 
-        public bool isExternal()
+        public bool EExterno()
         {
             return this.FilhoDireito == null && this.FilhoEsquerdo == null;
         }
 
-        public bool ehFilhoE()
+        public bool EFilhoEsquerdo()
         {
             return this.Valor <= this.Pai.Valor;
         }
 
-        public bool ehFilhoD()
+        public bool EFilhoDireito()
         {
             return this.Valor >= this.Pai.Valor;
         }

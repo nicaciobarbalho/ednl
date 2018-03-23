@@ -46,12 +46,13 @@
     <Compile Include="AVL\Arvore.cs" />
     <Compile Include="AVL\No.cs" />
     <Compile Include="AVL\Rotacao.cs" />
-    <Compile Include="RN\BTreePrinter.cs" />
+    <Compile Include="RN\ImpressaoArvore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RN\Arvore.cs" />
     <Compile Include="RN\IRubroNegra.cs" />
     <Compile Include="RN\No.cs" />
+    <Compile Include="RN\Rotacao.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

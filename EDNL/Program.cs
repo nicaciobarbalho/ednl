@@ -25,31 +25,37 @@ namespace EDNL
 
              Console.WriteLine(s1);*/
 
-            EDNL.RN.Arvore tree = new RN.Arvore();
-            EDNL.RN.No raiz = new EDNL.RN.No(10);
-            tree.setRaiz(raiz);
-            tree.incluir(6);
-            tree.incluir(22);
-            tree.incluir(3);
-            tree.incluir(8);
-            tree.incluir(7);
-            tree.incluir(9);
-            /*tree.incluir(70);
-            tree.incluir(120);
-            tree.incluir(60);
-            tree.incluir(80);
-            tree.incluir(110);
-            tree.incluir(130);
-            */
-            // Console.WriteLine("removendo");
-            //tree.remover(9);
+            EDNL.RN.Arvore tree = new RN.Arvore(10);
+            tree.Mensagem += Tree_Mensagem;
 
-            // tree.exibirArvore(tree.getRaiz());
+            Console.WriteLine("\nINCLUIR\n");
+            tree.Incluir(6);
+            tree.Incluir(22);
+            tree.Incluir(3);
+            tree.Incluir(8);
+            tree.Incluir(7);
+            tree.Incluir(9);
 
-            // tree.Print(tree.getRaiz(), 0);
-         
-            tree.Raiz().Print();
+            Console.WriteLine("\nREMOVER\n");
+            tree.Remover(3);
+
+
+            tree.Imprimir();
             Console.ReadKey();
+        }
+
+        private static void Tree_Mensagem(No no, string mensagem)
+        {
+            if (no != null)
+            {
+                Console.WriteLine("Nó: {0} -> {1}", no.Valor, mensagem);
+            }
+            else
+            {
+                Console.WriteLine(mensagem);
+            }
+
+            Console.WriteLine("\n------------------------------------------------------\n");
         }
     }
 }
