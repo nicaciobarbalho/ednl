@@ -121,10 +121,20 @@ namespace EDNL.RN
 
         public No Incluir(int chave)
         {
+            No novo = null;
+
+            //Adiciona na raiz
+            if (this.Raiz == null)
+            {
+                novo = new No(chave);
+                this.Raiz = novo;
+                return novo;
+            }
+
             //Busca o pai do no que vai ser inserido
             No pai = this.PesquisarPai(this.Raiz, chave);
             //Cria o novo no
-            No novo = new No(pai, chave);
+             novo = new No(pai, chave);
 
             //Verifica se o novo no é filho esquerdo do pai buscado
             if ((int)pai.Valor > (int)novo.Valor)

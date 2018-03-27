@@ -25,20 +25,18 @@ namespace EDNL
 
              Console.WriteLine(s1);*/
 
-            EDNL.RN.Arvore tree = new RN.Arvore(10);
+            int[] rb = { 10, 6, 22, 3, 8, 7, 9 };
+            EDNL.RN.Arvore tree = new RN.Arvore();
             tree.Mensagem += Tree_Mensagem;
 
             Console.WriteLine("\nINCLUIR\n");
-            tree.Incluir(6);
-            tree.Incluir(22);
-            tree.Incluir(3);
-            tree.Incluir(8);
-            tree.Incluir(7);
-            tree.Incluir(9);
+            foreach (int i in rb)
+            {
+                tree.Incluir(i);
+            }
 
-            Console.WriteLine("\nREMOVER\n");
-            tree.Remover(3);
-
+            //Console.WriteLine("\nREMOVER\n");
+            //tree.Remover(3);
 
             tree.Imprimir();
             Console.ReadKey();

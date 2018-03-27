@@ -21,7 +21,8 @@ namespace EDNL.RN
             set
             {
                 raiz = value;
-                raiz.Cor = No.CorRubroNegra.Negro;
+                if(raiz != null)
+                    raiz.Cor = No.CorRubroNegra.Negro;
             }
         }
 
