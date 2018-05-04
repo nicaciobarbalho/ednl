@@ -29,6 +29,13 @@ namespace EDNL.Grafo
             }
         }
 
+
+        /// <summary>
+        /// finalVertices(e);
+        /// Retorna um array armazenando os vértices finais da aresta e 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         public Vertice FindVertice(string o)
         {
             foreach (Vertice v in this.vertices)
@@ -72,6 +79,15 @@ namespace EDNL.Grafo
             return vertice;
         }
 
+        /// <summary>
+        /// oposto(v, e);
+        /// Retorna o vértice oposto de v em e, ou seja, o vértice final da
+        /// aresta e separado do vértice v.Um erro ocorre se e não é
+        /// incidente a v
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public Vertice Oposto(Vertice v, Aresta e)
         {
             if (v == e.V)
@@ -88,6 +104,15 @@ namespace EDNL.Grafo
             }
         }
 
+        /// <summary>
+        /// oposto(v, e);
+        /// Retorna o vértice oposto de v em e, ou seja, o vértice final da
+        /// aresta e separado do vértice v.Um erro ocorre se e não é
+        /// incidente a v
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public Vertice Oposto(string o, string b)
         {
             Vertice v = this.FindVertice(o);
@@ -106,6 +131,13 @@ namespace EDNL.Grafo
             }
         }
 
+        /// <summary>
+        /// éAdjacente(v, w);
+        /// Retorna true se v e w são adjacentes
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="w"></param>
+        /// <returns></returns>
         public bool IsAdjacente(Vertice v, Vertice w)
         {
             foreach (Aresta e in this.arestas)
@@ -118,6 +150,13 @@ namespace EDNL.Grafo
             return false;
         }
 
+        /// <summary>
+        /// éAdjacente(v, w);
+        /// Retorna true se v e w são adjacentes
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public bool IsAdjacente(string o, string b)
         {
             Vertice v = this.FindVertice(o);
@@ -149,6 +188,12 @@ namespace EDNL.Grafo
             }
         }
 
+        /// <summary>
+        /// substituir(v, x);
+        /// Substitui o elemento armazenado no vértice V por X
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="x"></param>
         public void SubstituirVertice(Vertice v, string x)
         {
             foreach (Vertice w in this.vertices)
@@ -161,6 +206,12 @@ namespace EDNL.Grafo
             }
         }
 
+        /// <summary>
+        /// substituir(e, x);
+        /// Substitui o elemento armazenado na aresta e com x
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="x"></param>
         public void SubstituirVertice(string o, string x)
         {
             Vertice v = this.FindVertice(o);
@@ -324,7 +375,9 @@ namespace EDNL.Grafo
             return retorno;
         }
 
-        // Matriz de Adjacencia
+        /// <summary>
+        /// Imprimir matriz de adjacencia
+        /// </summary>
         public void MatrizAdjacencia()
         {
             Console.WriteLine("========================== MATRIZ DE ADJACENCIA ==========================\n");
