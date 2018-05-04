@@ -46,6 +46,9 @@
     <Compile Include="AVL\Arvore.cs" />
     <Compile Include="AVL\No.cs" />
     <Compile Include="AVL\Rotacao.cs" />
+    <Compile Include="Grafo\Aresta.cs" />
+    <Compile Include="Grafo\TAD.cs" />
+    <Compile Include="Grafo\Vertice.cs" />
     <Compile Include="RN\ImpressaoArvore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

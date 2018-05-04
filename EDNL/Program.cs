@@ -11,34 +11,20 @@ namespace EDNL
     {
         static void Main(string[] args)
         {
-            /* int[] avl = { 8, 6, 20, 2, 7, 11, 29, 3, 10, 12, 24, 32, 9, 22, 31 };
+            Grafo.TAD grafo = new Grafo.TAD();
 
-             AVL.Arvore arvore = new AVL.Arvore();
+            grafo.InserirVertice("v1");
+            grafo.InserirVertice("v2");
+            grafo.InserirVertice("v3");
+            grafo.InserirVertice("v4");
 
-             foreach (int i in avl)
-             {
-                 arvore.Inserir(i, i);
-             }
+            grafo.InserirAresta("v1", "v2", "v12");
+            grafo.InserirAresta("v2", "v4", "v24");
+            grafo.InserirAresta("v3", "v1", "v31");
+            grafo.InserirAresta("v4", "v3", "v43");
 
-             string s1 = arvore.Imprimir();
+            grafo.MatrizAdjacencia();
 
-
-             Console.WriteLine(s1);*/
-
-            int[] rb = { 10, 6, 22, 3, 8, 7, 9 };
-            EDNL.RN.Arvore tree = new RN.Arvore();
-            tree.Mensagem += Tree_Mensagem;
-
-            Console.WriteLine("\nINCLUIR\n");
-            foreach (int i in rb)
-            {
-                tree.Incluir(i);
-            }
-
-            //Console.WriteLine("\nREMOVER\n");
-            //tree.Remover(3);
-
-            tree.Imprimir();
             Console.ReadKey();
         }
 
