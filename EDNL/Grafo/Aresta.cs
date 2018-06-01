@@ -11,12 +11,20 @@ namespace EDNL.Grafo
         private Vertice v;  
         private Vertice w;
         private bool orientado;
-        private string valor;
+        private object valor;
 
         public Aresta(Vertice v, Vertice w)
         {
             this.V = v;
             this.W = w;
+            this.Orientado = false;
+        }
+
+        public Aresta(Vertice v, Vertice w, object valor)
+        {
+            this.V = v;
+            this.W = w;
+            this.valor = valor;
             this.Orientado = false;
         }
         public Aresta(Vertice v, Vertice w, bool orientado)
@@ -26,7 +34,7 @@ namespace EDNL.Grafo
             this.Orientado = orientado;
         }
 
-        public string Valor
+        public object Valor
         {
             get
             {

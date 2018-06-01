@@ -33,8 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,9 +51,14 @@
     <Compile Include="AVL\Arvore.cs" />
     <Compile Include="AVL\No.cs" />
     <Compile Include="AVL\Rotacao.cs" />
+    <Compile Include="Cript\CriptografiaInfo.cs" />
+    <Compile Include="Cript\CriptografiaRijndael.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Grafo\Aresta.cs" />
+    <Compile Include="Grafo\Ponto.cs" />
     <Compile Include="Grafo\TAD.cs" />
     <Compile Include="Grafo\Vertice.cs" />
+    <Compile Include="Grafo\Labirinto.cs" />
     <Compile Include="RN\ImpressaoArvore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

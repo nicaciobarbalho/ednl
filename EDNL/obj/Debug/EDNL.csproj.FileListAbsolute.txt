@@ -10,3 +10,5 @@ C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\obj\Debug\EDNL.pdb
 C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\bin\Debug\EDNL.exe
 C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\bin\Debug\EDNL.pdb
 C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\obj\Debug\EDNL.csprojResolveAssemblyReference.cache
+C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\bin\Debug\Newtonsoft.Json.dll
+C:\Users\nicac\Desktop\IFRN\EDNL\ednl\EDNL\bin\Debug\Newtonsoft.Json.xml

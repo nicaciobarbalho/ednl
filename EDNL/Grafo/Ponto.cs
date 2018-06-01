@@ -6,16 +6,11 @@ using System.Threading.Tasks;
 
 namespace EDNL.Grafo
 {
-    public class Vertice
+    public  class Ponto
     {
+
         private object chave;
         private object valor;
-        private int grau;
-
-        public Vertice(object valor)
-        {
-            this.Valor = valor;
-        }
 
         public object Chave
         {
@@ -43,18 +38,17 @@ namespace EDNL.Grafo
             }
         }
 
-        public int Grau
+        public Ponto(object chave, object valor)
         {
-            get
-            {
-                return grau;
-            }
-
-            set
-            {
-                grau = value;
-            }
+            this.Chave = chave;
+            this.Valor = valor;
         }
         
+
+        public override string ToString()
+        {
+            return this.Chave.ToString();
+        }
+       
     }
 }

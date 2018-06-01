@@ -11,19 +11,27 @@ namespace EDNL
     {
         static void Main(string[] args)
         {
-            Grafo.TAD grafo = new Grafo.TAD();
+            /*Grafo.TAD grafo = new Grafo.TAD();
 
             grafo.InserirVertice("v1");
             grafo.InserirVertice("v2");
             grafo.InserirVertice("v3");
             grafo.InserirVertice("v4");
 
-            grafo.InserirAresta("v1", "v2", "v12");
-            grafo.InserirAresta("v2", "v4", "v24");
-            grafo.InserirAresta("v3", "v1", "v31");
-            grafo.InserirAresta("v4", "v3", "v43");
+            grafo.InserirAresta("v1", "v2", "10");
+            grafo.InserirAresta("v2", "v4", "11");
+            grafo.InserirAresta("v3", "v1", "12");
+            grafo.InserirAresta("v4", "v3", "13");
 
             grafo.MatrizAdjacencia();
+            Console.WriteLine("GRAU = {0}", grafo.GrauDoVertice("v2"));*/
+
+            // Cript.CriptografiaRijndael rij = new Cript.CriptografiaRijndael();
+            // Console.WriteLine("SENHA = {0}", rij.Decriptografar("9xQvmna7zUT2KbFszEvC2g=="));
+
+            Grafo.Labirinto lab = new Grafo.Labirinto();
+
+            lab.Dijkstra();
 
             Console.ReadKey();
         }

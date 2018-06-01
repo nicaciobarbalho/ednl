@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EDNL;
 
 namespace EDNL.Grafo
 {
-    public class TAD
+    public class Grafo
     {
 
         private List<Vertice> vertices = new List<Vertice>();
@@ -17,7 +18,7 @@ namespace EDNL.Grafo
         {
             get
             {
-                return vertices;
+                return vertices.Clone();
             }
         }
 
@@ -25,7 +26,7 @@ namespace EDNL.Grafo
         {
             get
             {
-                return arestas;
+                return arestas.Clone();
             }
         }
 
@@ -36,7 +37,7 @@ namespace EDNL.Grafo
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
-        public Vertice FindVertice(string o)
+        public Vertice FindVertice(object o)
         {
             foreach (Vertice v in this.vertices)
             {
@@ -48,7 +49,7 @@ namespace EDNL.Grafo
             return null;
         }
 
-        public Aresta FindAresta(string o)
+        public Aresta FindAresta(object o)
         {
             foreach (Aresta a in this.arestas)
             {
@@ -62,7 +63,7 @@ namespace EDNL.Grafo
 
         public List<Vertice> FinalVertices(Aresta e)
         {
-            List<Vertice> vertice = new List<Grafo.Vertice>();
+            List<Vertice> vertice = new List<Vertice>();
             vertice.Add(e.V);
             vertice.Add(e.W);
 
@@ -72,7 +73,7 @@ namespace EDNL.Grafo
         public List<Vertice> FinalVertices(string o)
         {
             Aresta e = this.FindAresta(o);
-            List<Vertice> vertice = new List<Grafo.Vertice>();
+            List<Vertice> vertice = new List<Vertice>();
             vertice.Add(e.V);
             vertice.Add(e.W);
 
@@ -250,17 +251,17 @@ namespace EDNL.Grafo
             }
         }
 
-        public Vertice InserirVertice(string o)
+        public Vertice InserirVertice(object o)
         {
             Vertice v = new Vertice(o);
             this.vertices.Add(v);
             return v;
         }
 
-        public Aresta InserirAresta(Vertice v, Vertice w, string o)
+        public Aresta InserirAresta(Vertice v, Vertice w, object o)
         {
-            Aresta a = new Aresta(v, w);
-            a.Valor = o;
+            Aresta a = new Aresta(v, w, o);
+            
             this.arestas.Add(a);
             return a;
         }
@@ -309,7 +310,7 @@ namespace EDNL.Grafo
         public List<Aresta> ArestasIncidentes(string o)
         {
             Vertice v = this.FindVertice(o);
-            List<Aresta> lista = new List<Grafo.Aresta>();
+            List<Aresta> lista = new List<Aresta>();
             foreach (Aresta a in this.arestas)
             {
                 if (a.HasVertice(v))
@@ -331,7 +332,7 @@ namespace EDNL.Grafo
             return e.Orientado;
         }
 
-        public string RemoverVertice(Vertice v)
+        public object RemoverVertice(Vertice v)
         {
             foreach (Aresta a in this.arestas)
             {
@@ -340,12 +341,12 @@ namespace EDNL.Grafo
                     this.arestas.Remove(a);
                 }
             }
-            string retorno = v.Valor;
+            object retorno = v.Valor;
             this.vertices.Remove(v);
             return retorno;
         }
 
-        public string RemoverVertice(string o)
+        public object RemoverVertice(object o)
         {
             Vertice v = this.FindVertice(o);
             foreach (Aresta a in this.arestas)
@@ -355,22 +356,22 @@ namespace EDNL.Grafo
                     this.arestas.Remove(a);
                 }
             }
-            string retorno = v.Valor;
+            object retorno = v.Valor;
             this.vertices.Remove(v);
             return retorno;
         }
 
-        public string RemoverAresta(Aresta a)
+        public object RemoverAresta(Aresta a)
         {
-            string retorno = a.Valor;
+            object retorno = a.Valor;
             this.arestas.Remove(a);
             return retorno;
         }
 
-        public string RemoverAresta(string o)
+        public object RemoverAresta(object o)
         {
             Aresta a = this.FindAresta(o);
-            string retorno = a.Valor;
+            object retorno = a.Valor;
             this.arestas.Remove(a);
             return retorno;
         }
@@ -381,13 +382,13 @@ namespace EDNL.Grafo
         public void MatrizAdjacencia()
         {
             Console.WriteLine("========================== MATRIZ DE ADJACENCIA ==========================\n");
-          
+
             for (int i = -1; i < vertices.Count; i++)
             {
-                
+
                 if (i >= 0)
                 {
-                    
+
                     Console.Write(vertices[i].Valor);
                 }
 
@@ -416,6 +417,28 @@ namespace EDNL.Grafo
             Console.Write("_______________\n");
 
 
+        }
+
+        public int  GrauDoVertice()
+        {
+            int i = 1;
+           foreach (var v in this.Vertices)
+            {
+                if (v.Valor != null)
+                    i +=1;
+            }
+            return i;
+        }
+
+        public int GrauDoVertice(string chave)
+        {
+            int i = 1;
+            foreach (var v in this.Vertices)
+            {
+                if (v.Valor != null && v.Valor.Equals(chave))
+                    i += 1;
+            }
+            return i;
         }
 
     }
