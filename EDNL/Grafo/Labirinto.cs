@@ -163,11 +163,14 @@ namespace EDNL.Grafo
                     if (v != null)
                     {
                         String borda = " ";
-                        if (Ponto(w).Valor.Equals("3"))
+                        //if (Ponto(w).Valor.Equals('3'))
+                        if (Index(w).Equals(3))
                         {
                             borda = "↗";
                         }
-                        else if (Ponto(w).Valor.Equals("2"))
+                        
+                       // else if (Ponto(w).Valor.Equals('2'))
+                        else if (Index(w).Equals(2))
                         {
                             borda = "↙";
                         }
@@ -199,7 +202,7 @@ namespace EDNL.Grafo
 
             Console.WriteLine("");
 
-            if (w != null && (Ponto(w).Valor.Equals("3") && distancias[Index(w)] < INFINITY))
+            if (w != null && Index(w).Equals(3) && distancias[Index(w)] < INFINITY)
             {
                 Console.WriteLine("Conseguiu.");
                 Console.Write("Caminho: ");

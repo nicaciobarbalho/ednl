@@ -1,6 +1,7 @@
 ﻿using EDNL.RN;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,20 @@ namespace EDNL
     {
         static void Main(string[] args)
         {
+           
+            Encoding altEnc = Encoding.GetEncoding("UTF-8");
+            /* Console.OutputEncoding = Encoding.UTF8;
+
+             Console.OutputEncoding = Encoding.BigEndianUnicode;
+
+             Console.OutputEncoding = Encoding.Unicode;
+
+             Console.OutputEncoding = Encoding.UTF32;
+
+             Console.OutputEncoding = Encoding.UTF7;*/
+
+            Console.OutputEncoding = altEnc;
+
             /*Grafo.TAD grafo = new Grafo.TAD();
 
             grafo.InserirVertice("v1");
@@ -29,10 +44,10 @@ namespace EDNL
             // Cript.CriptografiaRijndael rij = new Cript.CriptografiaRijndael();
             // Console.WriteLine("SENHA = {0}", rij.Decriptografar("9xQvmna7zUT2KbFszEvC2g=="));
 
-            Grafo.Labirinto lab = new Grafo.Labirinto();
+             Grafo.Labirinto lab = new Grafo.Labirinto();
 
-            lab.Dijkstra();
-
+             lab.Dijkstra();
+          //  Console.WriteLine("↗");
             Console.ReadKey();
         }
 
