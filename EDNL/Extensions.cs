@@ -16,8 +16,10 @@ namespace EDNL
         public static T Clone<T>(this T value) where T : class
         {
             string json = JsonConvert.SerializeObject(value);
+            Type tipo = value.GetType();
+            object obj = JsonConvert.DeserializeObject<T>(json);
 
-            return JsonConvert.DeserializeObject<T>(json);
+            return (T)Convert.ChangeType(obj, tipo);
             //return CloneHelper<T>.Clone(value);
 
         }
