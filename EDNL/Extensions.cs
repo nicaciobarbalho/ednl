@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Permissions;
 using System.Text;
@@ -15,12 +16,17 @@ namespace EDNL
     {
         public static T Clone<T>(this T value) where T : class
         {
-            string json = JsonConvert.SerializeObject(value);
-            Type tipo = value.GetType();
-            object obj = JsonConvert.DeserializeObject<T>(json);
+            //string json = JsonConvert.SerializeObject(value);
+            //Type tipo = value.GetType();
+            //object obj = JsonConvert.DeserializeObject<T>(json);
 
-            return (T)Convert.ChangeType(obj, tipo);
-            //return CloneHelper<T>.Clone(value);
+            //return (T)Convert.ChangeType(obj, tipo);
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();
+            formatter.Serialize(stream, value);
+            stream.Position = 0;
+            return (T)formatter.Deserialize(stream);
 
         }
 

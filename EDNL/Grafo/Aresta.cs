@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDNL.Grafo
 {
+    [Serializable]
     public class Aresta
     {
         private Vertice v;  

@@ -72,21 +72,20 @@ namespace EDNL.Grafo
             {
                 for (int j = 0; j < labirinto[i].Length; j++)
                 {
-                    if (labirinto[i][j].Equals('1')) continue;
+                    
+                    if (int.Parse(labirinto[i][j].ToString()).Equals(1)) continue;
 
-                    labirintoVertice[i, j] = grafo.InserirVertice(new Ponto(indiceVertice++, labirinto[i][j]));
+                    labirintoVertice[i, j] = grafo.InserirVertice(new Ponto(indiceVertice++, int.Parse(labirinto[i][j].ToString())));
 
-                    if (labirinto[i][j].Equals('2'))
+                    if (int.Parse(labirinto[i][j].ToString()).Equals(2))
                     {
                         inicio = labirintoVertice[i, j];
-                        if (i > 0 && !labirinto[i - 1][j].Equals('1'))
+                        if (i > 0 && !int.Parse(labirinto[i - 1][j].ToString()).Equals(1))
                         {
-                            // Console.WriteLine("Aresta entre: " + labirintoVertice[i][j].getValor().toString() + " <-> " + labirintoVertice[i - 1][j].getValor().toString());
                             grafo.InserirAresta(labirintoVertice[i, j], labirintoVertice[i - 1, j], 1);
                         }
-                        if (j > 0 && !labirinto[i][j - 1].Equals('1'))
+                        if (j > 0 && !int.Parse(labirinto[i][j - 1].ToString()).Equals(1))
                         {
-                            // Console.WriteLine("Aresta entre: " + labirintoVertice[i][j].getValor().toString() + " <-> " + labirintoVertice[i][j - 1].getValor().toString());
                             grafo.InserirAresta(labirintoVertice[i, j], labirintoVertice[i, j - 1], 1);
                         }
                     }
@@ -98,8 +97,8 @@ namespace EDNL.Grafo
             List<Vertice> naoPercorridos = grafo.Vertices;
 
             percorridos.Add(inicio);
-            vertices.Remove(inicio);
-            naoPercorridos.Remove(inicio);
+            vertices.RemoveAll(r => ((Ponto)r.Valor).Valor.Equals(2));
+            naoPercorridos.RemoveAll(r => ((Ponto)r.Valor).Valor.Equals(2));
 
 
             int[] distancias = new int[vertices.Count + 2];
@@ -159,22 +158,22 @@ namespace EDNL.Grafo
                 for (int j = 0; j < labirinto[i].Length; j++)
                 {
                     Vertice v = labirintoVertice[i,j];
-                    String str = "░░░░";
+                    String str = " ";
                     if (v != null)
                     {
-                        String borda = " ";
-                        //if (Ponto(w).Valor.Equals('3'))
-                        if (Index(w).Equals(3))
+                        String borda = "░░";
+                        int index = Index(v);
+                        
+                        if (index.Equals(3))
                         {
                             borda = "↗";
                         }
                         
-                       // else if (Ponto(w).Valor.Equals('2'))
-                        else if (Index(w).Equals(2))
+                        else if (index.Equals(2))
                         {
                             borda = "↙";
                         }
-                        str = borda + String.Format("{0:00}", (Ponto(w).Chave) + borda);
+                        str = borda + String.Format("{0:00}", RecuperaChave(v)) + borda;
                     }
                     Console.Write(str);
                 }
@@ -189,14 +188,14 @@ namespace EDNL.Grafo
                 if (antecessor[Index(v)] == null) continue;
                 Console.Write(antecessor[Index(v)].Valor);
                 Console.Write(" -> ");
-                Console.Write(v.Valor);
+                Console.Write(Index(v));
                 Console.WriteLine("");
             }
 
             Console.WriteLine("Percorridos: ");
             foreach (Vertice v in percorridos)
             {
-                Console.Write(v.Valor);
+                Console.Write(Index(v));
                 Console.Write(" ");
             }
 
@@ -217,10 +216,10 @@ namespace EDNL.Grafo
                     i = percorridos.IndexOf(vAntecessor);
                     v = vAntecessor;
                     vAntecessor = antecessor[Index(v)];
-                    caminho = Index(v) + "-> " + caminho;
+                    caminho = Index(v) + "." + caminho;
                 }
 
-                caminho = Index(percorridos[0]) + "-> " + caminho;
+                caminho = Index(percorridos[0]) + "." + caminho;
 
                 Console.WriteLine(caminho);
             }
@@ -248,6 +247,11 @@ namespace EDNL.Grafo
         private static int Index(Vertice v)
         {
             return int.Parse(Ponto(v).Valor.ToString());
+        }
+
+        private static object RecuperaChave(Vertice v)
+        {
+            return Ponto(v).Chave;
         }
 
         private static Ponto Ponto(Vertice v)
